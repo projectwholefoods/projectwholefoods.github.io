@@ -74,6 +74,19 @@ function initSlider() {
     sliderContainer.style.width = `${words[0].getBoundingClientRect().width}px`;
     sliderInner.style.transform = `translateY(-0.65em)`;
 
+    // Recalculate container width if the font-size changes due to window resize
+    window.addEventListener('resize', () => {
+        const currentWord = words[currentIndex];
+        if (currentWord) {
+            sliderContainer.style.transition = 'none'; // Instant snap on resize
+            sliderContainer.style.width = `${currentWord.getBoundingClientRect().width}px`;
+            // Restore smooth transition after a tiny delay
+            requestAnimationFrame(() => {
+                sliderContainer.style.transition = 'width 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            });
+        }
+    });
+
     // We only want to kick off the loop once
     if (!window.sliderInitialized) {
         window.sliderInitialized = true;
